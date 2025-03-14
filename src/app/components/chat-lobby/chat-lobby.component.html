@@ -1,0 +1,25 @@
+<div class="chat-lobby">
+  <h2>Chat Lobby</h2>
+
+  <!-- Create New Chat Room -->
+  <div class="new-room">
+    <input [(ngModel)]="newRoomName" placeholder="Room Name" />
+    <input [(ngModel)]="newRoomDescription" placeholder="Room Description" />
+    <select [(ngModel)]="newRoomType">
+      <option value="General">General</option>
+      <option value="Private">Private</option>
+    </select>
+    <button (click)="createRoom()">Create Room</button>
+  </div>
+
+  <hr />
+
+  <!-- List of Available Chat Rooms -->
+  <h3>Available Chat Rooms</h3>
+  <ul>
+    <li *ngFor="let room of chatRooms$ | async">
+      <strong>{{ room.name }}</strong> - {{ room.description }}
+      <button (click)="enterChatRoom(room.id!)">Join</button>
+    </li>
+  </ul>
+</div>

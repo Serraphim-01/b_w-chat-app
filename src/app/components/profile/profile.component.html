@@ -1,0 +1,16 @@
+<div class="profile-container">
+  <h2>Profile</h2>
+  <img [src]="photoURL" alt="Profile Picture" class="profile-pic" />
+
+  <form (ngSubmit)="updateProfile()">
+    <label for="displayName">Display Name</label>
+    <input type="text" id="displayName" [(ngModel)]="displayName" name="displayName" required />
+    <button type="submit">Update Profile</button>
+  </form>
+
+  <h3>Change Profile Picture</h3>
+  <input type="file" (change)="onFileSelected($event)" />
+  <button (click)="uploadProfilePicture()">Upload</button>
+
+  <p *ngIf="message" class="message">{{ message }}</p>
+</div>

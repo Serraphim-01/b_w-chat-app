@@ -1,0 +1,21 @@
+<div class="chat-container">
+  <div class="top-bar">
+    <h2>Chat Room</h2>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
+  <div class="messages">
+    <div *ngFor="let msg of messages$ | async" class="message" [class.own]="msg.userId === userId">
+      <div class="user-info" (click)="goToProfile(msg.userId)">
+        <img [src]="msg.photoURL || 'assets/default-avatar.png'" alt="User Avatar" width="40" height="40">
+        <span class="sender">{{ msg.sender }}</span>
+      </div>
+      <p>{{ msg.text }}</p>
+      <span class="timestamp">{{ msg.timestamp | date:'short' }}</span>
+    </div>
+  </div>
+
+  <form (submit)="sendMessage()">
+    <input type="text" [(ngModel)]="newMessage" name="messageInput" placeholder="Type a message..." required>
+    <button type="submit">Send</button>
+  </form>
+</div>
