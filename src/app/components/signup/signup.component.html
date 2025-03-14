@@ -14,14 +14,6 @@
     <input type="password" placeholder="Password" [(ngModel)]="password" name="password" required />
     <input type="password" placeholder="Confirm Password" [(ngModel)]="confirmPassword" name="confirmPassword" required />
 
-    <label for="profilePicture">Upload Profile Picture:</label>
-    <input type="file" id="profilePicture" (change)="handleFileInput($event)" />
-
-    <div *ngIf="profilePictureUrl">
-      <p>Preview:</p>
-      <img [src]="profilePictureUrl" alt="Profile Preview" class="profile-preview" />
-    </div>
-
     <button type="submit">Sign Up</button>
     
     <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
