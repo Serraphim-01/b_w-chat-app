@@ -6,10 +6,12 @@ import {
   collection,
   addDoc,
   query,
-  where,  // ✅ Added missing import
+  where,  
   orderBy,
   collectionData,
-  DocumentData,
+  doc,
+  updateDoc,
+  increment,
   Timestamp,
 } from '@angular/fire/firestore';
 import { Auth, signOut, User } from '@angular/fire/auth';
@@ -78,6 +80,12 @@ export class ChatComponent {
     });
   }
 
+  async increasePopularity() {
+    if (!this.roomId) return;
+    const roomDoc = doc(this.firestore, `chatRooms/${this.roomId}`);
+    await updateDoc(roomDoc, { popularity: increment(1) });
+  }
+
   async logout() {
     try {
       await signOut(this.auth);
@@ -87,58 +95,31 @@ export class ChatComponent {
     }
   }
 
-  async uploadProfilePicture(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (!file || !this.userId) return;
-
-    const storageRef = ref(this.storage, `profile_pictures/${this.userId}`);
-    await uploadBytes(storageRef, file);
-    const downloadURL = await getDownloadURL(storageRef);
-    this.profilePictureURL = downloadURL;
-  }
-
   async sendMessage() {
-    if (!this.userId || !this.roomId) {
-      console.error("User not authenticated or no chat room selected!");
-      return;
-    }
-    if (!this.newMessage.trim()) {
-      console.warn("Cannot send an empty message.");
-      return;
-    }
+    if (!this.userId || !this.roomId) return;
+    if (!this.newMessage.trim()) return;
 
-    try {
-      const messagesRef = collection(this.firestore, 'messages');
-      console.log("Sending message...");
+    const messagesRef = collection(this.firestore, 'messages');
 
-      await addDoc(messagesRef, {
-        text: this.newMessage,
-        sender: this.displayName,
-        userId: this.userId,
-        timestamp: new Date(),
-        photoURL: this.auth.currentUser?.photoURL || null,
-        roomId: this.roomId, // ✅ Ensure message is linked to the correct chat room
-      });
+    await addDoc(messagesRef, {
+      text: this.newMessage,
+      sender: this.displayName,
+      userId: this.userId,
+      timestamp: new Date(),
+      photoURL: this.auth.currentUser?.photoURL || null,
+      roomId: this.roomId,
+    });
 
-      console.log("Message sent successfully!");
-      this.newMessage = ''; // Clear input after sending
-    } catch (error) {
-      console.error("Error sending message:", error);
-    }
+    this.newMessage = ''; // Clear input
   }
 
   loadMessages(roomId: string | null) {
-    if (!roomId) {
-      console.error("No room ID provided for message loading.");
-      return;
-    }
-
-    console.log("Loading messages for room:", roomId);
+    if (!roomId) return;
 
     const messagesRef = collection(this.firestore, 'messages');
     const messagesQuery = query(
       messagesRef,
-      where('roomId', '==', roomId), // ✅ Only fetch messages for this room
+      where('roomId', '==', roomId),
       orderBy('timestamp')
     );
 

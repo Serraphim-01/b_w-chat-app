@@ -19,6 +19,9 @@
   <ul>
     <li *ngFor="let room of chatRooms$ | async">
       <strong>{{ room.name }}</strong> - {{ room.description }}
+      <button (click)="boostRoom(room.id!)">
+        ⭐ {{ room.popularity || 0 }} 
+      </button>
       <button (click)="enterChatRoom(room.id!)">Join</button>
     </li>
   </ul>

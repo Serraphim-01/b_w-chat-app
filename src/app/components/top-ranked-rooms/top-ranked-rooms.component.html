@@ -1,0 +1,8 @@
+<div class="top-rooms">
+  <h2>🔥 Top Ranked Rooms</h2>
+  <ul>
+    <li *ngFor="let room of topRooms$ | async">
+      <strong>{{ room.name }}</strong> - Popularity: {{ room.popularity }}
+    </li>
+  </ul>
+</div>

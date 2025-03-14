@@ -1,0 +1,30 @@
+.navbar {
+  background: #1e1e1e;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+
+  ul {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    
+    li {
+      a {
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 5px;
+        transition: 0.3s;
+
+        &.active {
+          background: #007bff;
+        }
+
+        &:hover {
+          background: #0056b3;
+        }
+      }
+    }
+  }
+}
