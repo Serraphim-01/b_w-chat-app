@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import {
   Firestore,
   collection,
-  addDoc,
   collectionData,
   doc,
   getDoc,
@@ -42,21 +41,21 @@ interface ChatRoom {
   styleUrls: ['./chat-lobby.component.scss'],
 })
 export class ChatLobbyComponent {
-  private firestore = inject(Firestore);
-  private router = inject(Router);
-  private auth = inject(Auth);
+  private firestore: Firestore;
+  private router: Router;
+  private auth: Auth;
 
   chatRooms$: Observable<ChatRoom[]>;
   availableRooms$: Observable<ChatRoom[]> = of([]); // Publicly available rooms
   userRooms$: Observable<ChatRoom[]> = of([]); // Rooms created by the current user
 
-  newRoomName = '';
-  newRoomDescription = '';
-  newRoomType = 'General';
-  newRoomKey = '';
   userId: string | null = null;
 
   constructor() {
+    this.firestore = inject(Firestore);
+    this.router = inject(Router);
+    this.auth = inject(Auth);
+
     const roomsRef = collection(this.firestore, 'chatRooms');
     this.chatRooms$ = collectionData(roomsRef, { idField: 'id' }) as Observable<
       ChatRoom[]
@@ -86,36 +85,6 @@ export class ChatLobbyComponent {
     );
   }
 
-  async createRoom() {
-    if (!this.newRoomName.trim() || !this.newRoomDescription.trim()) return;
-
-    const roomData: ChatRoom = {
-      name: this.newRoomName,
-      description: this.newRoomDescription,
-      roomType: this.newRoomType,
-      popularity: 0,
-      boostedBy: [],
-      createdBy: this.userId ?? '',
-    };
-
-    if (this.newRoomType === 'Private') {
-      if (!this.newRoomKey.trim()) {
-        alert('Please enter a room key for the private room.');
-        return;
-      }
-      roomData.roomKey = this.newRoomKey;
-    }
-
-    const roomsRef = collection(this.firestore, 'chatRooms');
-    await addDoc(roomsRef, roomData);
-
-    // Reset form after adding a room
-    this.newRoomName = '';
-    this.newRoomDescription = '';
-    this.newRoomType = 'General';
-    this.newRoomKey = '';
-  }
-
   async enterChatRoom(roomId: string) {
     if (!roomId) return;
 
@@ -139,11 +108,6 @@ export class ChatLobbyComponent {
 
     this.router.navigate(['/chat', roomId]);
   }
-
-  // async increasePopularity(roomId: string) {
-  //  const roomDoc = doc(this.firestore, `chatRooms/${roomId}`);
-  //  await updateDoc(roomDoc, { popularity: increment(5000) });
-  //}
 
   async boostRoom(roomId: string) {
     if (!this.userId) {
