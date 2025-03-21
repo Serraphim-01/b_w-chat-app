@@ -2,7 +2,12 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Auth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
+import {
+  Auth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-login',
@@ -22,10 +27,10 @@ export class LoginComponent {
   async login() {
     try {
       await signInWithEmailAndPassword(this.auth, this.email, this.password);
-      
+
       this.showModal = true; // Show modal
       setTimeout(() => {
-        this.router.navigate(['/chat-lobby']);
+        this.router.navigate(['/nav']);
       }, 3000); // 3-second delay
     } catch (error: any) {
       this.errorMessage = error.message;
@@ -36,10 +41,10 @@ export class LoginComponent {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(this.auth, provider);
-      
+
       this.showModal = true;
       setTimeout(() => {
-        this.router.navigate(['/chat-lobby']);
+        this.router.navigate(['/nav']);
       }, 3000);
     } catch (error: any) {
       this.errorMessage = error.message;
@@ -50,3 +55,6 @@ export class LoginComponent {
     this.router.navigate(['/signup']);
   }
 }
+
+// TODO: navigate to the Chat App on Login
+// TODO: ...

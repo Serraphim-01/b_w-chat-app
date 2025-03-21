@@ -78,19 +78,19 @@ export class SignupComponent {
   }
 
   handleFileInput(event: any) {
-    const file = event.target.files[0]; 
+    const file = event.target.files[0];
 
     if (file) {
-      this.profilePictureFile = file; 
+      this.profilePictureFile = file;
 
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.profilePictureUrl = e.target.result; 
+        this.profilePictureUrl = e.target.result;
       };
-      reader.readAsDataURL(file); 
+      reader.readAsDataURL(file);
     } else {
       this.profilePictureFile = undefined;
-      this.profilePictureUrl = ''; 
+      this.profilePictureUrl = '';
     }
   }
 
@@ -108,3 +108,8 @@ export class SignupComponent {
     this.router.navigate(['/login']);
   }
 }
+
+// TODO: Add a way to set Profile Picture
+// TODO: Method to show and Hide password
+// TODO: Method to show and Hide confirm password
+// TODO: ...

@@ -1,0 +1,31 @@
+<div class="available-rooms">
+  <h3>Available Rooms</h3>
+  <ul *ngIf="availableRooms.length > 0; else noRooms">
+    <li *ngFor="let room of availableRooms">
+      <div class="room-header">
+        <strong>{{ room.name }}</strong>
+        <span
+          class="tag"
+          [ngClass]="{
+            general: room.roomType === 'General',
+            private: room.roomType === 'Private'
+          }"
+        >
+          {{ room.roomType }}
+        </span>
+      </div>
+      <p>{{ room.description }}</p>
+
+      <div class="room-actions">
+        <button (click)="boostRoom(room.id!)">
+          ⭐ {{ room.popularity || 0 }}
+        </button>
+        <button (click)="enterChatRoom(room.id!)">Join</button>
+      </div>
+    </li>
+  </ul>
+
+  <ng-template #noRooms>
+    <p>No available rooms to join.</p>
+  </ng-template>
+</div>

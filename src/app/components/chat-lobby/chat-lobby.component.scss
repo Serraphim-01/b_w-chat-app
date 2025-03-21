@@ -1,0 +1,29 @@
+.room-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tag {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+
+.general {
+  background-color: #28a745;
+  color: white;
+}
+
+.private {
+  background-color: #dc3545;
+  color: white;
+}
+
+.room-actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 10px;
+}

@@ -2,7 +2,12 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Auth, updateProfile, User } from '@angular/fire/auth';
-import { getDownloadURL, ref, Storage, uploadBytes } from '@angular/fire/storage';
+import {
+  getDownloadURL,
+  ref,
+  Storage,
+  uploadBytes,
+} from '@angular/fire/storage';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,7 +15,7 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent {
   private auth = inject(Auth);
@@ -68,3 +73,10 @@ export class ProfileComponent {
     }
   }
 }
+
+// TODO: Connect the date of birth, profile picture, email, name.
+// TODO: Add a way to change the password
+// TODO: Add icons beside editable fields
+// TODO: Add a way to delete account
+// TODO: Add a way to logout
+// TODO: ...

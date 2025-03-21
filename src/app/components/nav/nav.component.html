@@ -1,8 +1,32 @@
 <nav class="navbar">
   <ul>
-    <li><a routerLink="/chat-lobby" routerLinkActive="active">Chat Lobby</a></li>
-    <li><a routerLink="/top-rooms" routerLinkActive="active">Top Ranked</a></li>
-    <li><a routerLink="/add-friends" routerLinkActive="active">Add Friends</a></li>
-    <li><a routerLink="/profile/:userId" routerLinkActive="active">Profile</a></li>
+    <li><a routerLink="chat-lobby" routerLinkActive="active">Chat Lobby</a></li>
+    <li><a routerLink="top-rooms" routerLinkActive="active">Top Ranked</a></li>
+    <li>
+      <a routerLink="add-friends" routerLinkActive="active">Add Friends</a>
+    </li>
   </ul>
+
+  <div class="user-actions">
+    <!-- Display Name (Clickable) -->
+    <span class="display-name" *ngIf="currentUser" (click)="goToProfile()">
+      {{ currentUser.displayName || "Profile" }}
+    </span>
+
+    <!-- Logout Button -->
+    <button class="logout-btn" *ngIf="currentUser" (click)="openLogoutModal()">
+      Logout
+    </button>
+  </div>
 </nav>
+
+<!-- Logout Confirmation Modal -->
+<div class="modal" *ngIf="showLogoutModal">
+  <div class="modal-content">
+    <p>Are you sure you want to logout?</p>
+    <button class="confirm-btn" (click)="logout()">Yes</button>
+    <button class="cancel-btn" (click)="closeLogoutModal()">No</button>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

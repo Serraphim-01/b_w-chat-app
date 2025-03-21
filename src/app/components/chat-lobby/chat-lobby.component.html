@@ -1,28 +1,16 @@
-<div class="chat-lobby">
-  <h2>Chat Lobby</h2>
+<app-user-rooms
+  [userRooms]="(userRooms$ | async) || []"
+  [userId]="userId"
+  [boostRoom]="boostRoom.bind(this)"
+  [enterChatRoom]="enterChatRoom.bind(this)"
+  [createRoom]="createRoom.bind(this)"
+>
+</app-user-rooms>
 
-  <!-- Create New Chat Room -->
-  <div class="new-room">
-    <input [(ngModel)]="newRoomName" placeholder="Room Name" />
-    <input [(ngModel)]="newRoomDescription" placeholder="Room Description" />
-    <select [(ngModel)]="newRoomType">
-      <option value="General">General</option>
-      <option value="Private">Private</option>
-    </select>
-    <button (click)="createRoom()">Create Room</button>
-  </div>
-
-  <hr />
-
-  <!-- List of Available Chat Rooms -->
-  <h3>Available Chat Rooms</h3>
-  <ul>
-    <li *ngFor="let room of chatRooms$ | async">
-      <strong>{{ room.name }}</strong> - {{ room.description }}
-      <button (click)="boostRoom(room.id!)">
-        ⭐ {{ room.popularity || 0 }} 
-      </button>
-      <button (click)="enterChatRoom(room.id!)">Join</button>
-    </li>
-  </ul>
-</div>
+<app-available-rooms
+  [availableRooms]="(availableRooms$ | async) || []"
+  [userId]="userId"
+  [boostRoom]="boostRoom.bind(this)"
+  [enterChatRoom]="enterChatRoom.bind(this)"
+>
+</app-available-rooms>
