@@ -1,15 +1,58 @@
-.signup-link {
-  cursor: pointer;
-  color: blue;
-  text-decoration: underline;
-}
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
+@import "../../../styles.scss";
+
+// Login Component Styles
+
+.login-container {
   padding: 20px;
+  background-color: $color-light-gray; // Use global color
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-family: "Orbitron", sans-serif; // Use global font
+  color: $color-black; // Use global color
+  margin-bottom: 20px;
+}
+
+.google-btn {
+  @extend button; // Use global button styles
+  background-color: #db4437; // Google red color
+  color: $color-white; // Use global color
+
+  &:hover {
+    background-color: darken(#db4437, 10%); // Darken on hover
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  @extend input; // Use global input styles
+  margin-bottom: 15px;
+}
+
+.error {
+  color: red; // Error message color
+}
+
+.signup-link {
+  color: $color-dark-gray; // Use global color
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+    color: $color-black; // Use global color
+  }
+}
+
+// Modal Styles
+.modal {
+  background-color: $color-white; // Use global color
+  padding: 15px;
   border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }

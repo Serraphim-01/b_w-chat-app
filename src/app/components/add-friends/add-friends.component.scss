@@ -1,131 +1,72 @@
+@import "../../../styles.scss";
+// Add Friends Component Styles
+
 .friends {
-  max-width: 400px;
-  margin: 0 auto;
   padding: 20px;
-  background: #f9f9f9;
+  background-color: $color-light-gray; // Use global color
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
   h2 {
-    font-size: 1.5rem;
+    font-family: "Orbitron", sans-serif; // Use global font
+    color: $color-black; // Use global color
     margin-bottom: 15px;
   }
 
   .search {
     display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 
     input {
+      @extend input; // Use global input styles
       flex: 1;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      outline: none;
-      transition: border 0.2s;
-
-      &:focus {
-        border-color: #007bff;
-      }
+      margin-right: 10px;
     }
 
     button {
-      padding: 8px 12px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.2s;
-
-      &:hover {
-        background: #0056b3;
-      }
+      @extend button; // Use global button styles
     }
   }
 
   .user-result {
-    background: #fff;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    margin-bottom: 20px;
 
     p {
       margin: 0;
-      font-size: 1rem;
     }
 
     button {
-      background: #28a745;
-      color: white;
-      padding: 5px 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.2s;
-
-      &:hover {
-        background: #218838;
-      }
+      @extend button; // Use global button styles
+      margin-left: 10px;
     }
 
     span {
-      font-size: 0.9rem;
-      color: gray;
+      color: $color-dark-gray; // Use global color
     }
   }
 
   h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+    margin-top: 20px;
   }
 
   ul {
-    list-style: none;
+    list-style-type: none;
     padding: 0;
 
     li {
-      background: #fff;
-      padding: 10px;
-      border-radius: 4px;
+      background-color: $color-white; // Use global color
+      border: 1px solid $color-gray;
+      border-radius: 5px;
       margin-bottom: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 10px;
 
       button {
-        background: #007bff;
-        color: white;
-        padding: 5px 10px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background 0.2s;
-        margin-left: 5px;
-
-        &:hover {
-          background: #0056b3;
-        }
-
-        &:nth-child(2) {
-          background: #dc3545;
-
-          &:hover {
-            background: #c82333;
-          }
-        }
+        @extend button; // Use global button styles
       }
     }
   }
 
   p {
-    font-size: 1rem;
-    color: #666;
+    color: $color-dark-gray; // Use global color
   }
 }

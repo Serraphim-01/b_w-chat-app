@@ -41,6 +41,8 @@ interface ChatRoom {
   styleUrls: ['./chat-lobby.component.scss'],
 })
 export class ChatLobbyComponent {
+  showUserRooms: boolean = true;
+
   private firestore: Firestore;
   private router: Router;
   private auth: Auth;
@@ -69,6 +71,10 @@ export class ChatLobbyComponent {
         this.userId = null;
       }
     });
+  }
+
+  toggleRooms(showUserRooms: boolean) {
+    this.showUserRooms = showUserRooms;
   }
 
   filterRooms() {

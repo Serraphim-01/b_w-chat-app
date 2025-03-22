@@ -1,100 +1,83 @@
+@import "../../../styles.scss";
+// Nav Component Styles
+
 .navbar {
-  background: #1e1e1e;
-  padding: 10px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $color-dark-gray; // Use global color
+  padding: 10px 20px;
+  border-bottom: 2px solid $color-light-gray; // Use global color
 
   ul {
+    list-style-type: none;
     display: flex;
-    list-style: none;
-    gap: 20px;
+    margin: 0;
+    padding: 0;
 
     li {
+      margin-right: 20px;
+
       a {
-        color: white;
+        color: $color-white; // Use global color
         text-decoration: none;
-        padding: 10px;
+        padding: 5px 10px;
         border-radius: 5px;
-        transition: 0.3s;
 
         &.active {
-          background: #007bff;
+          background-color: $color-light-gray; // Use global color
+          color: $color-black; // Use global color
         }
 
         &:hover {
-          background: #0056b3;
+          background-color: lighten($color-light-gray, 10%); // Lighten on hover
         }
+      }
+    }
+  }
+
+  .user-actions {
+    display: flex;
+    align-items: center;
+
+    .display-name {
+      color: $color-white; // Use global color
+      cursor: pointer;
+      margin-right: 20px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .logout-btn {
+      @extend button; // Use global button styles
+      background-color: $color-white; // Use global color for logout button
+      color: $color-dark-gray; // Use global color
+
+      &:hover {
+        background-color: darken($color-white, 10%); // Darken on hover
       }
     }
   }
 }
 
-.user-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.display-name {
-  cursor: pointer;
-  font-weight: bold;
-  padding: 8px 12px;
-  border-radius: 5px;
-  transition: background 0.2s;
-}
-
-.display-name:hover {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-.logout-btn {
-  background: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background 0.2s;
-}
-
-.logout-btn:hover {
-  background: #d93d3d;
-}
-
-/* Modal Styles */
+// Modal Styles
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: $color-white; // Use global color
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-.confirm-btn {
-  background: #28a745;
-  color: white;
-  padding: 8px 12px;
-  margin: 10px;
-  border: none;
-  cursor: pointer;
-}
-
-.cancel-btn {
-  background: #dc3545;
-  color: white;
-  padding: 8px 12px;
-  margin: 10px;
-  border: none;
-  cursor: pointer;
+  .confirm-btn,
+  .cancel-btn {
+    @extend button; // Use global button styles
+    margin-top: 10px;
+  }
 }

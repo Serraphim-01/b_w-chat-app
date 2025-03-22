@@ -1,0 +1,59 @@
+// Global Styles for Chat Application
+
+// Monochrome Color Scheme
+$color-black: #000000;
+$color-dark-gray: #333333;
+$color-gray: #666666;
+$color-light-gray: #999999;
+$color-white: #ffffff;
+
+// Font Styles
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&family=Orbitron&display=swap");
+
+body {
+  font-family: "Orbitron", sans-serif; // Fallback font
+  color: $color-dark-gray;
+  font-size: 16px; // Global font size
+  letter-spacing: 0.5px; // Global letter spacing
+}
+
+.chat-message {
+  font-family: "Audiowide", sans-serif; // Chat messages font
+}
+
+// Global Styles for Form Inputs
+input,
+textarea {
+  border: 1px solid $color-gray;
+  padding: 10px;
+  background-color: $color-light-gray;
+  color: $color-black;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+// Global Styles for Buttons
+button {
+  background-color: $color-dark-gray;
+  color: $color-white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+
+  &:hover {
+    background-color: $color-black;
+  }
+}
+
+// Global Styles for Text Links
+a {
+  color: $color-dark-gray;
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+    color: $color-black;
+  }
+}

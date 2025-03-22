@@ -1,20 +1,32 @@
+@import "../../../styles.scss";
+// Top Ranked Rooms Styles
+
 .top-rooms {
-  padding: 16px;
-  border: 1px solid #ccc;
+  padding: 20px;
+  background-color: $color-light-gray; // Use global color
   border-radius: 8px;
-  max-width: 400px;
-}
-h2 {
-  margin-bottom: 12px;
-}
-ul {
-  list-style: none;
-  padding: 0;
-}
-li {
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
-}
-li:last-child {
-  border-bottom: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    font-family: "Orbitron", sans-serif; // Use global font
+    color: $color-black; // Use global color
+    margin-bottom: 15px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+
+    li {
+      background-color: $color-white; // Use global color
+      border: 1px solid $color-gray;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      padding: 10px;
+
+      strong {
+        color: $color-dark-gray; // Use global color
+      }
+    }
+  }
 }

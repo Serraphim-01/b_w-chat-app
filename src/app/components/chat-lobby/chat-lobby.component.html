@@ -1,15 +1,38 @@
-<app-user-rooms
-  [userRooms]="(userRooms$ | async) || []"
-  [userId]="userId"
-  [boostRoom]="boostRoom.bind(this)"
-  [enterChatRoom]="enterChatRoom.bind(this)"
->
-</app-user-rooms>
+<div class="chat-lobby">
+  <!-- Navigation Bar -->
+  <nav class="lobby-nav">
+    <button
+      class="nav-button"
+      [class.active]="showUserRooms"
+      (click)="showUserRooms = true"
+    >
+      User Rooms
+    </button>
+    <button
+      class="nav-button"
+      [class.active]="!showUserRooms"
+      (click)="showUserRooms = false"
+    >
+      Available Rooms
+    </button>
+  </nav>
 
-<app-available-rooms
-  [availableRooms]="(availableRooms$ | async) || []"
-  [userId]="userId"
-  [boostRoom]="boostRoom.bind(this)"
-  [enterChatRoom]="enterChatRoom.bind(this)"
->
-</app-available-rooms>
+  <!-- Room Sections -->
+  <div class="rooms-container">
+    <app-user-rooms
+      *ngIf="showUserRooms"
+      [userRooms]="(userRooms$ | async) || []"
+      [userId]="userId"
+      [boostRoom]="boostRoom.bind(this)"
+      [enterChatRoom]="enterChatRoom.bind(this)"
+    ></app-user-rooms>
+
+    <app-available-rooms
+      *ngIf="!showUserRooms"
+      [availableRooms]="(availableRooms$ | async) || []"
+      [userId]="userId"
+      [boostRoom]="boostRoom.bind(this)"
+      [enterChatRoom]="enterChatRoom.bind(this)"
+    ></app-available-rooms>
+  </div>
+</div>

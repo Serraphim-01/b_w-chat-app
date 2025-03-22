@@ -1,29 +1,143 @@
-.room-header {
+@import "../../../styles.scss";
+
+// Chat Lobby Styles
+
+.chat-lobby {
+  padding: 20px;
+  background-color: $color-light-gray; // Use global color
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.lobby-nav {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
+  margin-bottom: 20px;
 }
 
-.tag {
-  font-size: 12px;
-  font-weight: bold;
-  padding: 4px 8px;
-  border-radius: 5px;
-  text-transform: uppercase;
+.nav-button {
+  @extend button; // Use global button styles
+  flex: 1;
+  margin: 0 5px;
+
+  &.active {
+    background-color: $color-dark-gray; // Highlight active button
+    color: $color-white; // Use global color
+  }
 }
 
-.general {
-  background-color: #28a745;
-  color: white;
+.rooms-container {
+  margin-top: 20px;
 }
 
-.private {
-  background-color: #dc3545;
-  color: white;
+// Available Rooms Styles
+.available-rooms {
+  .room-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+
+  .room-list {
+    list-style-type: none;
+    padding: 0;
+
+    .room-item {
+      background-color: $color-white; // Use global color
+      border: 1px solid $color-gray;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      padding: 10px;
+
+      .room-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .room-tag {
+          &.general {
+            background-color: green;
+          }
+          &.private {
+            background-color: red;
+          }
+        }
+      }
+
+      .room-actions {
+        display: flex;
+        justify-content: space-between;
+
+        .action-button {
+          @extend button; // Use global button styles
+        }
+      }
+    }
+  }
+
+  .no-rooms {
+    color: $color-dark-gray; // Use global color
+  }
 }
 
-.room-actions {
-  margin-top: 8px;
-  display: flex;
-  gap: 10px;
+// User Rooms Styles
+.user-rooms {
+  .room-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+
+  .create-room {
+    margin-bottom: 20px;
+
+    .form-input,
+    .form-select {
+      @extend input; // Use global input styles
+      margin-bottom: 10px;
+    }
+
+    .form-button {
+      @extend button; // Use global button styles
+    }
+  }
+
+  .room-list {
+    list-style-type: none;
+    padding: 0;
+
+    .room-item {
+      background-color: $color-white; // Use global color
+      border: 1px solid $color-gray;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      padding: 10px;
+
+      .room-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .room-tag {
+          &.general {
+            background-color: green;
+          }
+          &.private {
+            background-color: red;
+          }
+        }
+      }
+
+      .room-actions {
+        display: flex;
+        justify-content: space-between;
+
+        .action-button {
+          @extend button; // Use global button styles
+        }
+      }
+    }
+  }
+
+  .no-rooms {
+    color: $color-dark-gray; // Use global color
+  }
 }
