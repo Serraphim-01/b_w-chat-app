@@ -44,6 +44,11 @@
         >
           {{ room.roomType }}
         </span>
+
+        <!-- 🔹 Owner Tag if the user is the creator -->
+        <span *ngIf="room.createdBy === userId" class="owner-tag">
+          👑 Owner
+        </span>
       </div>
       <p class="room-description">{{ room.description }}</p>
 
@@ -52,8 +57,16 @@
           ⭐ {{ room.popularity || 0 }}
         </button>
         <button class="action-button join" (click)="enterChatRoom(room.id!)">
-          Join
+          {{ isMember(room) ? "🚪Enter Room" : "🤝Join" }}
         </button>
+        <!-- 🔹 Show Delete button only if user is the owner -->
+      <button
+      *ngIf="room.createdBy === userId"
+      class="action-button delete"
+      (click)="deleteRoom(room.id!)"
+    >
+      🗑️ Delete
+    </button>
       </div>
     </li>
   </ul>

@@ -25,14 +25,16 @@
       [userId]="userId"
       [boostRoom]="boostRoom.bind(this)"
       [enterChatRoom]="enterChatRoom.bind(this)"
+      [deleteRoom]="deleteRoom.bind(this)"
     ></app-user-rooms>
 
     <app-available-rooms
-      *ngIf="!showUserRooms"
-      [availableRooms]="(availableRooms$ | async) || []"
-      [userId]="userId"
-      [boostRoom]="boostRoom.bind(this)"
-      [enterChatRoom]="enterChatRoom.bind(this)"
-    ></app-available-rooms>
+    *ngIf="!showUserRooms"
+    [availableRooms]="(availableRooms$ | async) || []"
+    [userId]="userId"
+    [boostRoom]="boostRoom.bind(this)"
+    [enterChatRoom]="enterChatRoom.bind(this)"
+    [leaveChatRoom]="leaveChatRoom.bind(this)"
+      ></app-available-rooms>
   </div>
 </div>

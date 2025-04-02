@@ -1,0 +1,12 @@
+// TODO: Create a Mission Component that Allows for the 
+- Creation of Missions, 
+- Viewing Missions, 
+- Deleting Missions, 
+- Accepting Missions, 
+- Viewing Mission's details
+- Viewing Mission's progress
+- Viewing Mission's status
+- Viewing Mission's rewards
+- Viewing Mission's requirements
+- Viewing Mission's objectives
+- Viewing Mission's timeline

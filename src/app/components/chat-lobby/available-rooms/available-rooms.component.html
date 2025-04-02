@@ -21,8 +21,11 @@
         <button class="action-button boost" (click)="boostRoom(room.id!)">
           ⭐ {{ room.popularity || 0 }}
         </button>
-        <button class="action-button join" (click)="enterChatRoom(room.id!)">
+        <button class="action-button join" *ngIf="!isMember(room)" (click)="enterChatRoom(room.id!)">
           Join
+        </button>
+        <button class="action-button leave" *ngIf="isMember(room)" (click)="leaveChatRoom(room.id!)">
+          Leave
         </button>
       </div>
     </li>

@@ -3,7 +3,19 @@
     <h2>Chat Room</h2>
     <button (click)="increasePopularity()">⭐ Boost Popularity</button>
     <button class="logout-btn" (click)="logout()">Logout</button>
+
+    <!-- Hide Leave Room button if the user is the owner -->
+    <button
+      *ngIf="roomOwnerId !== userId"
+      class="leave-room-btn"
+      (click)="leaveRoom()"
+    >
+      ❌ Leave Room
+    </button>
+
+    <button class="back-btn" (click)="goBack()">⬅️ Back</button>
   </div>
+
   <div class="messages">
     <div
       *ngFor="let msg of messages$ | async"

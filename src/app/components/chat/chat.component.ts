@@ -10,18 +10,13 @@ import {
   orderBy,
   collectionData,
   doc,
+  getDoc,
   updateDoc,
   increment,
   Timestamp,
 } from '@angular/fire/firestore';
 import { Auth, signOut, User } from '@angular/fire/auth';
 import { Observable, map } from 'rxjs';
-import {
-  Storage,
-  ref,
-  uploadBytes,
-  getDownloadURL,
-} from '@angular/fire/storage';
 import { Router, ActivatedRoute } from '@angular/router';
 
 interface Message {
@@ -43,7 +38,6 @@ interface Message {
 export class ChatComponent {
   private firestore = inject(Firestore);
   private auth = inject(Auth);
-  private storage = inject(Storage);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -53,6 +47,7 @@ export class ChatComponent {
   displayName: string | null = 'Anonymous';
   profilePictureURL: string | null = null;
   roomId: string | null = null;
+  roomOwnerId: string | null = null; // Store Room Owner ID
 
   constructor() {
     // Listen for authentication changes
@@ -68,16 +63,28 @@ export class ChatComponent {
       }
     });
 
-    // Get Room ID from Route and Load Messages
-    this.route.paramMap.subscribe((params) => {
+    // Get Room ID from Route and Load Room Data & Messages
+    this.route.paramMap.subscribe(async (params) => {
       this.roomId = params.get('roomId');
       if (this.roomId) {
         console.log("Entered chat room:", this.roomId);
+        await this.loadRoomData(this.roomId);
         this.loadMessages(this.roomId);
       } else {
         console.error("No room ID found in the URL.");
       }
     });
+  }
+
+  // Fetch Room Creator ID
+  async loadRoomData(roomId: string) {
+    const roomRef = doc(this.firestore, 'chatRooms', roomId);
+    const roomSnap = await getDoc(roomRef);
+
+    if (roomSnap.exists()) {
+      const roomData = roomSnap.data() as { createdBy?: string };
+      this.roomOwnerId = roomData.createdBy || null;
+    }
   }
 
   async increasePopularity() {
@@ -135,6 +142,31 @@ export class ChatComponent {
         }))
       )
     );
+  }
+
+  async leaveRoom() {
+    if (!this.userId || !this.roomId) return;
+    if (this.userId === this.roomOwnerId) return; // Prevent owner from leaving
+  
+    const roomRef = doc(this.firestore, 'chatRooms', this.roomId);
+    const roomSnap = await getDoc(roomRef);
+  
+    if (roomSnap.exists()) {
+      const roomData = roomSnap.data() as { members?: string[] };
+      const members = roomData['members'] || [];
+  
+      if (members.includes(this.userId)) {
+        const updatedMembers = members.filter(member => member !== this.userId);
+        await updateDoc(roomRef, { members: updatedMembers });
+        console.log('Left the room successfully.');
+      }
+    }
+  
+    this.router.navigate(['/nav/chat-lobby']);
+  }
+
+  goBack() {
+    this.router.navigate(['/nav/chat-lobby']); 
   }
 
   goToChatRoom(roomId: string) {

@@ -8,6 +8,7 @@ interface ChatRoom {
   roomType: string;
   popularity: number;
   boostedBy: string[];
+  members?: string[];
 }
 
 @Component({
@@ -22,4 +23,9 @@ export class AvailableRoomsComponent {
   @Input() userId: string | null = null;
   @Input() boostRoom!: (roomId: string) => void;
   @Input() enterChatRoom!: (roomId: string) => void;
+  @Input() leaveChatRoom!: (roomId: string) => void;
+
+  isMember(room: ChatRoom): boolean {
+    return room.members?.includes(this.userId ?? '') ?? false;
+  }
 }

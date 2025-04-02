@@ -1,7 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, doc, deleteDoc } from '@angular/fire/firestore';
 
 interface ChatRoom {
   id?: string;
@@ -12,6 +12,7 @@ interface ChatRoom {
   boostedBy: string[];
   createdBy: string;
   roomKey?: string;
+  members?: string[];  // Ensure we have the members field
 }
 
 @Component({
@@ -28,12 +29,18 @@ export class UserRoomsComponent {
   @Input() userId: string | null = null;
   @Input() boostRoom!: (roomId: string) => void;
   @Input() enterChatRoom!: (roomId: string) => void;
+  @Input() deleteRoom!: (roomId: string) => void;
 
   // Form properties
   newRoomName = '';
   newRoomDescription = '';
   newRoomType = 'General';
   newRoomKey = '';
+
+  // ✅ Check if the user is already a member of the room
+  isMember(room: ChatRoom): boolean {
+    return room.members?.includes(this.userId ?? '') ?? false;
+  }
 
   async createRoom() {
     if (!this.newRoomName.trim() || !this.newRoomDescription.trim()) {
@@ -53,6 +60,7 @@ export class UserRoomsComponent {
         popularity: 0,
         boostedBy: [],
         createdBy: this.userId ?? '',
+        members: [this.userId],  // Creator is automatically a member
       };
 
       if (this.newRoomType === 'Private') {

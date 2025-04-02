@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -10,10 +10,11 @@ import {
   updateDoc,
   arrayUnion,
   increment,
+  deleteDoc,
 } from '@angular/fire/firestore';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { Observable, map, of } from 'rxjs';
+import { Observable, Subscription, map, of } from 'rxjs';
 import { AvailableRoomsComponent } from './available-rooms/available-rooms.component';
 import { UserRoomsComponent } from './user-rooms/user-rooms.component';
 
@@ -26,6 +27,7 @@ interface ChatRoom {
   boostedBy: string[];
   createdBy: string;
   roomKey?: string;
+  members?: string[];
 }
 
 @Component({
@@ -40,7 +42,7 @@ interface ChatRoom {
   templateUrl: './chat-lobby.component.html',
   styleUrls: ['./chat-lobby.component.scss'],
 })
-export class ChatLobbyComponent {
+export class ChatLobbyComponent implements OnDestroy {
   showUserRooms: boolean = true;
 
   private firestore: Firestore;
@@ -48,8 +50,9 @@ export class ChatLobbyComponent {
   private auth: Auth;
 
   chatRooms$: Observable<ChatRoom[]>;
-  availableRooms$: Observable<ChatRoom[]> = of([]); // Publicly available rooms
-  userRooms$: Observable<ChatRoom[]> = of([]); // Rooms created by the current user
+  availableRooms$: Observable<ChatRoom[]> = of([]);
+  userRooms$: Observable<ChatRoom[]> = of([]);
+  private roomsSubscription: Subscription | null = null; // Store subscription
 
   userId: string | null = null;
 
@@ -65,8 +68,8 @@ export class ChatLobbyComponent {
 
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        this.userId = user?.uid ?? '';
-        this.filterRooms();
+        this.userId = user.uid ?? '';
+        this.loadRooms();
       } else {
         this.userId = null;
       }
@@ -77,18 +80,29 @@ export class ChatLobbyComponent {
     this.showUserRooms = showUserRooms;
   }
 
-  filterRooms() {
-    this.availableRooms$ = this.chatRooms$.pipe(
-      map((rooms) =>
-        rooms.filter(
-          (room) => room.roomType === 'General' || room.roomType === 'Private'
-        )
-      )
-    );
+  loadRooms() {
+    if (this.roomsSubscription) {
+      this.roomsSubscription.unsubscribe(); // Cleanup previous subscription
+    }
 
-    this.userRooms$ = this.chatRooms$.pipe(
-      map((rooms) => rooms.filter((room) => room.createdBy === this.userId))
-    );
+    this.roomsSubscription = this.chatRooms$.subscribe((rooms) => {
+      this.availableRooms$ = of(
+        rooms.filter(
+          (room) =>
+            (room.roomType === 'General' || room.roomType === 'Private') &&
+            !room.members?.includes(this.userId ?? '')
+        )
+      );
+
+      // 🔹 Make sure userRooms$ includes rooms where the user is a member
+      this.userRooms$ = of(
+        rooms.filter(
+          (room) => room.members?.includes(this.userId ?? '') // 🔥 Fix: Now detects joined rooms
+        )
+      );
+
+      console.log('User Rooms Updated:', this.userRooms$);
+    });
   }
 
   async enterChatRoom(roomId: string) {
@@ -103,7 +117,15 @@ export class ChatLobbyComponent {
     }
 
     const roomData = roomSnap.data() as ChatRoom;
+    const members = roomData.members || [];
 
+    // If the user is already a member of the room, bypass the room key prompt
+    if (this.userId && members.includes(this.userId)) {
+      this.router.navigate(['/chat', roomId]);
+      return; // User is already in the room, so no need to request the room key
+    }
+
+    // Handle Private Room Key Prompt
     if (roomData.roomType === 'Private') {
       const userInputKey = prompt('Enter the Room Key:');
       if (userInputKey !== roomData.roomKey) {
@@ -112,7 +134,45 @@ export class ChatLobbyComponent {
       }
     }
 
+    // Add User to Room if not already a member
+    if (this.userId && !members.includes(this.userId)) {
+      await updateDoc(roomRef, { members: [...members, this.userId] });
+
+      // 🔹 Force a fresh fetch after the update
+      setTimeout(() => {
+        this.loadRooms(); // Ensures `userRooms$` updates with the latest data
+      }, 300); // Small delay to allow Firestore to update
+    }
+
+    // Navigate to the chat room
     this.router.navigate(['/chat', roomId]);
+  }
+
+  async leaveChatRoom(roomId: string) {
+    if (!this.userId) return;
+
+    const roomRef = doc(this.firestore, 'chatRooms', roomId);
+    const roomSnap = await getDoc(roomRef);
+
+    if (!roomSnap.exists()) {
+      console.error('Room not found!');
+      return;
+    }
+
+    const roomData = roomSnap.data() as ChatRoom;
+
+    // 🔹 Prevent the owner from leaving
+    if (roomData.createdBy === this.userId) {
+      alert('Owners cannot leave their own room. You can only delete it.');
+      return;
+    }
+
+    const updatedMembers =
+      roomData.members?.filter((id) => id !== this.userId) || [];
+
+    await updateDoc(roomRef, { members: updatedMembers });
+
+    this.loadRooms(); // Refresh available rooms after leaving
   }
 
   async boostRoom(roomId: string) {
@@ -143,11 +203,26 @@ export class ChatLobbyComponent {
 
     console.log('Room boosted successfully!');
   }
-}
 
-// TODO: Private rooms should request a code before user can join
-// TODO: Create 2 sections in the Chat-lobby:
-// 1. User Chat Rooms: Here the user can see all their chat rooms they have joined
-// 2. Other Chat Rooms: Here the user can see other Available chat rooms created by other users.
-// TODO: Add a search bar to filter chat rooms
-// TODO:
+  async deleteRoom(roomId: string) {
+    if (!confirm('Are you sure you want to delete this room?')) {
+      return;
+    }
+
+    try {
+      const roomRef = doc(this.firestore, 'chatRooms', roomId);
+      await deleteDoc(roomRef);
+      this.loadRooms(); // Refresh rooms after deletion
+      console.log('Room deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting room:', error);
+    }
+  }
+
+  // Cleanup subscriptions when component is destroyed
+  ngOnDestroy(): void {
+    if (this.roomsSubscription) {
+      this.roomsSubscription.unsubscribe();
+    }
+  }
+}
