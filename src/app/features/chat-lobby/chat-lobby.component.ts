@@ -15,8 +15,8 @@ import {
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Observable, Subscription, map, of } from 'rxjs';
-import { AvailableRoomsComponent } from './available-rooms/available-rooms.component';
-import { UserRoomsComponent } from './user-rooms/user-rooms.component';
+import { AvailableRoomsComponent } from '../../components/chat-lobby/available-rooms/available-rooms.component';
+import { UserRoomsComponent } from '../../components/chat-lobby/user-rooms/user-rooms.component';
 
 interface ChatRoom {
   id?: string;

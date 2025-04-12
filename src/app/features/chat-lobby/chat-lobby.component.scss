@@ -131,13 +131,13 @@
         justify-content: space-between;
 
         .action-button {
-          @extend button; // Use global button styles
+          @extend button;
         }
       }
     }
   }
 
   .no-rooms {
-    color: $color-dark-gray; // Use global color
+    color: $color-dark-gray; 
   }
 }

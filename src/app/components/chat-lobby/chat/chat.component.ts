@@ -6,7 +6,7 @@ import {
   collection,
   addDoc,
   query,
-  where,  
+  where,
   orderBy,
   collectionData,
   doc,
@@ -47,7 +47,9 @@ export class ChatComponent {
   displayName: string | null = 'Anonymous';
   profilePictureURL: string | null = null;
   roomId: string | null = null;
-  roomOwnerId: string | null = null; // Store Room Owner ID
+  roomOwnerId: string | null = null;
+  isDirectChat: boolean = false;
+  roomName: string = 'Chat Room';
 
   constructor() {
     // Listen for authentication changes
@@ -56,9 +58,9 @@ export class ChatComponent {
         this.userId = user.uid;
         this.displayName = user.displayName || 'Anonymous';
         this.profilePictureURL = user.photoURL || 'favicon.ico';
-        console.log("User authenticated:", this.userId);
+        console.log('User authenticated:', this.userId);
       } else {
-        console.warn("User not logged in!");
+        console.warn('User not logged in!');
         this.router.navigate(['/login']);
       }
     });
@@ -67,11 +69,11 @@ export class ChatComponent {
     this.route.paramMap.subscribe(async (params) => {
       this.roomId = params.get('roomId');
       if (this.roomId) {
-        console.log("Entered chat room:", this.roomId);
+        console.log('Entered chat room:', this.roomId);
         await this.loadRoomData(this.roomId);
         this.loadMessages(this.roomId);
       } else {
-        console.error("No room ID found in the URL.");
+        console.error('No room ID found in the URL.');
       }
     });
   }
@@ -80,12 +82,18 @@ export class ChatComponent {
   async loadRoomData(roomId: string) {
     const roomRef = doc(this.firestore, 'chatRooms', roomId);
     const roomSnap = await getDoc(roomRef);
-
+  
     if (roomSnap.exists()) {
-      const roomData = roomSnap.data() as { createdBy?: string };
+      const roomData = roomSnap.data() as { createdBy?: string; type?: string; friendName?: string };
+  
       this.roomOwnerId = roomData.createdBy || null;
+  
+      // Check if it's a direct chat
+      this.isDirectChat = roomData.type === 'direct';
+      this.roomName = this.isDirectChat ? roomData.friendName || 'Friend Chat' : 'Chat Room';
     }
   }
+  
 
   async increasePopularity() {
     if (!this.roomId) return;
@@ -147,26 +155,28 @@ export class ChatComponent {
   async leaveRoom() {
     if (!this.userId || !this.roomId) return;
     if (this.userId === this.roomOwnerId) return; // Prevent owner from leaving
-  
+
     const roomRef = doc(this.firestore, 'chatRooms', this.roomId);
     const roomSnap = await getDoc(roomRef);
-  
+
     if (roomSnap.exists()) {
       const roomData = roomSnap.data() as { members?: string[] };
       const members = roomData['members'] || [];
-  
+
       if (members.includes(this.userId)) {
-        const updatedMembers = members.filter(member => member !== this.userId);
+        const updatedMembers = members.filter(
+          (member) => member !== this.userId
+        );
         await updateDoc(roomRef, { members: updatedMembers });
         console.log('Left the room successfully.');
       }
     }
-  
+
     this.router.navigate(['/nav/chat-lobby']);
   }
 
   goBack() {
-    this.router.navigate(['/nav/chat-lobby']); 
+    this.router.navigate(['/nav/chat-lobby']);
   }
 
   goToChatRoom(roomId: string) {

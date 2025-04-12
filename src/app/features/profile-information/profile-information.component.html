@@ -1,0 +1,7 @@
+<div class="nav-container">
+    <button [class.active]="activeTab === 'profile'" (click)="setTab('profile')">👤 Profile</button>
+  </div>
+  
+  <div class="tab-content">
+    <app-profile *ngIf="activeTab === 'profile'"></app-profile>
+  </div>

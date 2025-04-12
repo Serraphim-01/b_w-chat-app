@@ -1,19 +1,24 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { ChatComponent } from './components/chat/chat.component';
-import { SignupComponent } from './components/signup/signup.component';
+import { LoginComponent } from './features/auth/login/login.component';
+import { ChatComponent } from './components/chat-lobby/chat/chat.component';
+import { SignupComponent } from './features/auth/signup/signup.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { ChatLobbyComponent } from './components/chat-lobby/chat-lobby.component';
-import { TopRankedRoomsComponent } from './components/top-ranked-rooms/top-ranked-rooms.component';
-import { AddFriendsComponent } from './components/add-friends/add-friends.component';
+import { ChatLobbyComponent } from './features/chat-lobby/chat-lobby.component';
+import { TopRankedRoomsComponent } from './components/chat-lobby/top-ranked-rooms/top-ranked-rooms.component';
 import { NavComponent } from './components/nav/nav.component';
+import { ProfileInformationComponent } from './features/profile-information/profile-information.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
   { path: 'chat/:roomId', component: ChatComponent },
-  { path: 'profile/:userId', component: ProfileComponent },
+  { path: 'profile-info', component: ProfileInformationComponent,
+    children: [
+      { path: '', redirectTo: 'profile/:userId', pathMatch: 'full' },
+      { path: 'profile/:userId', component: ProfileComponent },
+    ]
+  },
   {
     path: 'nav',
     component: NavComponent,
@@ -22,7 +27,6 @@ export const routes: Routes = [
       { path: '', redirectTo: 'chat-lobby', pathMatch: 'full' },
       { path: 'chat-lobby', component: ChatLobbyComponent },
       { path: 'top-rooms', component: TopRankedRoomsComponent },
-      { path: 'add-friends', component: AddFriendsComponent },
     ],
-  },
+  }
 ];

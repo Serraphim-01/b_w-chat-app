@@ -8,6 +8,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from '@angular/fire/auth';
+import { Firestore, doc, getDoc, setDoc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-login',
@@ -23,10 +24,26 @@ export class LoginComponent {
   showModal = false;
   private auth = inject(Auth);
   private router = inject(Router);
+  private firestore = inject(Firestore);
 
   async login() {
     try {
       await signInWithEmailAndPassword(this.auth, this.email, this.password);
+
+      const user = this.auth.currentUser;
+      if (user) {
+        const userRef = doc(this.firestore, 'users', user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+          await setDoc(userRef, {
+            name: user.displayName || '',
+            email: user.email,
+            friends: [],
+            friendRequests: [],
+          });
+        }
+      }
 
       this.showModal = true; // Show modal
       setTimeout(() => {
@@ -41,6 +58,21 @@ export class LoginComponent {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(this.auth, provider);
+
+      const user = this.auth.currentUser;
+      if (user) {
+        const userRef = doc(this.firestore, 'users', user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+          await setDoc(userRef, {
+            name: user.displayName || '',
+            email: user.email,
+            friends: [],
+            friendRequests: [],
+          });
+        }
+      }
 
       this.showModal = true;
       setTimeout(() => {

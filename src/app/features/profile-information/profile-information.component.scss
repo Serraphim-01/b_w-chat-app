@@ -1,0 +1,26 @@
+.nav-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  
+    button {
+      padding: 10px 20px;
+      background-color: #eee;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 5px;
+  
+      &.active {
+        background-color: #007bff;
+        color: white;
+      }
+    }
+  }
+  
+  .tab-content {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  

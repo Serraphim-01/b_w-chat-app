@@ -15,6 +15,7 @@ import {
   uploadBytes,
   getDownloadURL,
 } from '@angular/fire/storage';
+import { Firestore, doc, getDoc, setDoc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-signup',
@@ -27,6 +28,7 @@ export class SignupComponent {
   private auth = inject(Auth);
   private router = inject(Router);
   private storage = inject(Storage);
+  private firestore = inject(Firestore);
 
   name = '';
   email = '';
@@ -64,6 +66,14 @@ export class SignupComponent {
         displayName: this.name,
         photoURL: this.profilePictureUrl,
       });
+
+      // Save user to Firestore
+await setDoc(doc(this.firestore, 'users', user.uid), {
+  name: this.name,
+  email: this.email,
+  friends: [],
+  friendRequests: [],
+});
 
       this.successMessage = 'Account created successfully! Please log in.';
       this.errorMessage = '';

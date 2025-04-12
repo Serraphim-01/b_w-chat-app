@@ -26,7 +26,7 @@ export class NavComponent implements OnInit {
 
   goToProfile() {
     if (this.currentUser) {
-      this.router.navigate([`/profile/${this.currentUser.uid}`]);
+      this.router.navigate([`/profile-info/profile/${this.currentUser.uid}`]);
     }
   }
 

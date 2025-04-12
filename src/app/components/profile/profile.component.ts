@@ -2,13 +2,8 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Auth, updateProfile, User } from '@angular/fire/auth';
-import {
-  getDownloadURL,
-  ref,
-  Storage,
-  uploadBytes,
-} from '@angular/fire/storage';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common'; // Import Location service
 
 @Component({
   selector: 'app-profile',
@@ -19,8 +14,8 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent {
   private auth = inject(Auth);
-  private storage = inject(Storage);
   private router = inject(Router);
+  private location = inject(Location); // Inject Location service
 
   user: User | null = null;
   displayName = '';
@@ -33,7 +28,6 @@ export class ProfileComponent {
       if (user) {
         this.user = user;
         this.displayName = user.displayName || '';
-        this.photoURL = user.photoURL || this.photoURL;
       } else {
         this.router.navigate(['/login']); // Redirect if not logged in
       }
@@ -51,28 +45,11 @@ export class ProfileComponent {
     }
   }
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
-  }
-
-  async uploadProfilePicture() {
-    if (!this.selectedFile || !this.user) return;
-
-    const filePath = `profile_pictures/${this.user.uid}`;
-    const storageRef = ref(this.storage, filePath);
-
-    try {
-      await uploadBytes(storageRef, this.selectedFile);
-      const url = await getDownloadURL(storageRef);
-      await updateProfile(this.user, { photoURL: url });
-
-      this.photoURL = url;
-      this.message = 'Profile picture updated!';
-    } catch (error: any) {
-      this.message = error.message;
-    }
+  goBack() {
+    this.location.back(); // Navigate back to the previous page
   }
 }
+
 
 // TODO: Connect the date of birth, profile picture, email, name.
 // TODO: Add a way to change the password

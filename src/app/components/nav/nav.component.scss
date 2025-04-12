@@ -81,3 +81,57 @@
     margin-top: 10px;
   }
 }
+
+// Nav Component Styles (continued)
+
+// Responsive Styles
+@media (max-width: 768px) {
+  .navbar {
+    align-items: flex-start;
+    justify-content: space-between;
+
+    ul {
+      flex-direction: column;
+      width: 100%;
+
+      li {
+        margin: 0;
+        width: max-content;
+
+        a {
+          display: block;
+          width: 100%;
+          padding: 10px 15px;
+          border-radius: 0;
+
+          &.active {
+            background-color: $color-light-gray;
+            color: $color-black;
+          }
+
+          &:hover {
+            background-color: lighten($color-light-gray, 10%);
+          }
+        }
+      }
+    }
+
+    .user-actions {
+      flex-direction: column;
+      align-items: flex-end;
+      width: 100%;
+      margin-top: 10px;
+
+      .display-name,
+      .logout-btn {
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  .modal {
+    width: 90%;
+    margin: 20px auto;
+  }
+}
