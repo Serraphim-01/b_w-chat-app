@@ -54,11 +54,13 @@
         align-items: center;
 
         .room-tag {
+          padding: 5px;
+          border-radius: 8px;
           &.general {
-            background-color: green;
+            background-color: rgba(0, 128, 0, 0.5);
           }
           &.private {
-            background-color: red;
+            background-color: rgba(255, 0, 0, 0.5);
           }
         }
       }
@@ -91,12 +93,12 @@
 
     .form-input,
     .form-select {
-      @extend input; // Use global input styles
-      margin-bottom: 10px;
+      @extend input; 
+      margin: 0 5px 10px 5px;
     }
 
     .form-button {
-      @extend button; // Use global button styles
+      @extend button;
     }
   }
 
@@ -105,7 +107,7 @@
     padding: 0;
 
     .room-item {
-      background-color: $color-white; // Use global color
+      background-color: $color-white;
       border: 1px solid $color-gray;
       border-radius: 5px;
       margin-bottom: 10px;
@@ -117,11 +119,13 @@
         align-items: center;
 
         .room-tag {
+          padding: 5px;
+          border-radius: 8px;
           &.general {
-            background-color: green;
+            background-color: rgba(0, 128, 0, 0.5);
           }
           &.private {
-            background-color: red;
+            background-color: rgba(255, 0, 0, 0.5);
           }
         }
       }
@@ -129,6 +133,7 @@
       .room-actions {
         display: flex;
         justify-content: space-between;
+        gap: 5px;
 
         .action-button {
           @extend button;
