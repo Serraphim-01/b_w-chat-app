@@ -1,6 +1,6 @@
 Simple RealTime Chat App. 
 
-Live Demo: https://b-w-chat-app.vercel.app/nav/chat-lobby
+Live Demo: https://b-w-chat-app.vercel.app/
 
 Building Tools: Angular with Typescript and SASS
 
